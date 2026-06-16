@@ -20,21 +20,21 @@ const loginController = async (req, res) => {
         .json({ success: false, message: "Password incorrect" });
     }
 
-    // syntax: jwt.sign(payload, secretKey, options)
     const token = jwt.sign(
-      { id: user._id, email: email, name: user.name, avatar: user.profile }, // in jwt id is must to make work easier
+      { id: user._id, email: email, name: user.name, avatar: user.profile }, 
       process.env.MY_JWT_KEY,
       { expiresIn: "10d" },
     );
 
-   res.cookie("token", token, {
-  httpOnly: true,
-  secure: true,       
-  sameSite: "none",   
-  maxAge: 10 * 24 * 60 * 60 * 1000,
-});
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: true,      
+      sameSite: "none",   
+      path: "/",
+      maxAge: 10 * 24 * 60 * 60 * 1000,
+    });
 
-    return res.status(200).json({ success: true, message: "Login Sucessfull", avatar: user.profile });
+    return res.status(200).json({ success: true, message: "Login Successful", avatar: user.profile });
 
   } catch (error) {
     return res.status(500).json({ success: false, message: "Database error.." });
