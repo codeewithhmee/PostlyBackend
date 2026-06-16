@@ -1,35 +1,43 @@
-
-const express=require('express')
-const app=express();
+const express = require('express')
+const app = express();
 const cookieParser = require('cookie-parser');
-const connectDB=require('./db/conncetDb')
+const connectDB = require('./db/conncetDb')
 const cors = require("cors")
+const fs = require("fs");
+
 require('dotenv').config()
 
+if (!fs.existsSync("uploads")) {
+  fs.mkdirSync("uploads");
+}
+
 connectDB()
-//cors
+
 app.use(cors({
-  origin: "http://localhost:5173", // or your frontend URL
+  origin: ["http://localhost:5173"],
   credentials: true
 }))
-// middlewares
 
+//middleware
 app.use(cookieParser());
 app.use(express.json())
-app.get('/',(req,res)=>{
-    res.json({"name":"samir"})
+
+app.get('/', (req, res) => {
+  res.json({ "name": "samir" })
 })
 
 //routes
-const authenticationMiddlewere=require('./middleware/getme');
-// 1.Authentication routes(lofin,signup,Authentication)
-const authRoute=require('./routes/authRoute')
-app.use('/api/auth',authRoute)
-// 2.Blogs routes(lofin,signup,Authentication)
-const blogRoute=require('./routes/blogRoute')
-app.use('/api/blogs',authenticationMiddlewere,blogRoute)
+const authenticationMiddlewere = require('./middleware/getme');
 
-const PORT=5000;
-app.listen(PORT,()=>{
-    console.log("Server is listening at port ",PORT);
+//auth route
+const authRoute = require('./routes/authRoute')
+app.use('/api/auth', authRoute)
+
+//blogs orute
+const blogRoute = require('./routes/blogRoute')
+app.use('/api/blogs', authenticationMiddlewere, blogRoute)
+
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log("Server is listening at port ", PORT);
 })
