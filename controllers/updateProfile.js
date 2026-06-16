@@ -1,6 +1,7 @@
 const User = require("../models/userSchema");
 const cloudinary = require("../utils/cloudinary");
 const fs = require("fs");
+const bcrypt = require("bcrypt"); // Required bcrypt
 
 const updateUser = async (req, res) => {
   try {
@@ -27,7 +28,7 @@ const updateUser = async (req, res) => {
     if (name) updates.name = name;
 
     if (password) {
-      updates.password = password;
+      updates.password = await bcrypt.hash(password, 10); // Matches registerController exactly
     }
 
     if (req.file) {
