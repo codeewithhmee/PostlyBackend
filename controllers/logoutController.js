@@ -1,12 +1,12 @@
 const logoutController = async (req, res) => {
   try {
-    
+    // clearCookie automatically overwrites the value and expires it
     return res
       .status(200)
-      .cookie("token", "", {
+      .clearCookie("token", {
         httpOnly: true,
-        sameSite: "lax",
-        expires: new Date(0), 
+        secure: true,      
+        sameSite: "none", 
       })
       .json({
         success: true,
@@ -18,4 +18,4 @@ const logoutController = async (req, res) => {
   }
 };
 
-module.exports = logoutController ;
+module.exports = logoutController;
