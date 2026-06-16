@@ -14,7 +14,7 @@ if (!fs.existsSync("uploads")) {
 connectDB()
 
 app.use(cors({
-  origin: ["http://localhost:5173"],
+  origin: ["http://localhost:5173","https://postly-frontend-vud5.vercel.app"],
   credentials: true
 }))
 
